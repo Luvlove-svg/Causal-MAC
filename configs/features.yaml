@@ -1,0 +1,41 @@
+# configs/features.yaml
+# NuScenes-mini 特征提取配置
+
+feature_extraction:
+  # 通用配置
+  feature_dim: 128                # 特征向量维度
+  max_objects: 8                  # 每个样本最大物体数量
+  max_distance: 50.0              # 考虑物体的最大距离(米)
+  feature_list:                   # 要提取的特征列表
+    - "ego_position"
+    - "ego_speed"
+    - "object_features"
+    - "image_features"            # 可选
+  
+  # 物体特征配置
+  object_feature_size: 7          # 每个物体的特征维度
+  object_categories:              # 考虑的物体类别
+    - "vehicle.car"
+    - "vehicle.truck"
+    - "vehicle.bus"
+    - "human.pedestrian"
+    - "vehicle.bicycle"
+    - "vehicle.motorcycle"
+  
+  # 图像特征配置
+  use_image_features: false       # 是否使用图像特征
+  image_feature_dim: 128          # 图像特征维度
+  resize_image: [224, 224]        # 图像调整大小
+  
+  # 因果图生成配置
+  causal:
+    algorithm: "fci-pc"           # 因果发现算法
+    causal_threshold: 0.6          # 因果相关性阈值
+    max_variables: 100            # 最大变量数
+    parallel_workers: 4           # 并行工作数
+    
+  # 硬件优化
+  hardware:
+    use_gpu: false                # 是否使用GPU进行目标检测
+    max_cpu_cores: 8              # 最大CPU核心数
+    memory_limit: "4GB"           # 内存限制

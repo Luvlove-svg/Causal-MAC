@@ -1,0 +1,52 @@
+# configs/model/causal_mac.yaml
+
+# Causal-MAC 主模型配置
+model:
+  name: "causal_mac_v1"
+  type: "multi_agent_policy"       # 模型类型
+  
+  # 输入/输出配置
+  input_dim: 30                    # 输入特征维度
+  output_dim: 5                    # 动作空间维度
+  communication_dim: 16            # 通信消息维度
+  
+  # 模型架构
+  architecture:
+    encoder:
+      type: "mlp"                  # 编码器类型 (mlp, cnn, transformer)
+      layers: [128, 64]            # 隐藏层维度
+      activation: "relu"           # 激活函数
+    
+    communication_scheduler:
+      type: "causal"               # 通信调度器类型
+      causal_threshold: 0.6        # 因果相关性阈值
+      use_nsa_attention: true      # 使用NSA稀疏注意力
+    
+    policy_head:
+      type: "mlp"
+      layers: [64]
+      activation: "tanh"
+      
+    value_head:
+      type: "mlp"
+      layers: [64]
+      activation: "relu"
+  
+  # 因果推理配置
+  causal_reasoning:
+    causal_graph_path: "data/processed/causal_graphs/base_pursuit_graph.npz" # 预加载因果图
+    update_interval: 10            # 因果图更新间隔（0表示不更新）
+    update_method: "fci-pc"        # 更新方法 (fci-pc, nsa)
+    
+  # 奖励机制
+  reward:
+    counterfactual_weight: 0.7     # 反事实奖励权重
+    communication_penalty: 0.2     # 通信惩罚权重
+    success_reward_weight: 1.0     # 任务成功奖励权重
+  
+  # 硬件优化配置
+  hardware:
+    quantization: "int4"           # 量化方式 (none, int8, int4)
+    use_mixed_precision: true      # 使用混合精度训练
+    jit_compile: true              # 使用JIT编译关键组件
+    max_gpu_memory: 4500           # 最大GPU内存使用(MB)

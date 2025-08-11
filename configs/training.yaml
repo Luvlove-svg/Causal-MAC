@@ -1,0 +1,63 @@
+# configs/training.yaml
+
+# 训练过程配置
+training:
+  experiment_name: "causal_mac_exp1" # 实验名称
+  env_config: "env/custom_map.yaml" # 环境配置文件
+  model_config: "model/causal_mac.yaml" # 模型配置文件
+  
+  # 训练参数
+  num_episodes: 5000               # 训练回合数
+  max_steps_per_episode: 1200      # 每回合最大步数
+  batch_size: 64                   # 批大小
+  buffer_size: 100000              # 回放缓冲区大小
+  
+  # 优化器配置
+  optimizer:
+    type: "adamw"                  # 优化器类型
+    learning_rate: 0.0003          # 学习率
+    weight_decay: 0.01             # 权重衰减
+    beta1: 0.9                     # Adam beta1
+    beta2: 0.999                   # Adam beta2
+    
+  # 学习率调度
+  lr_scheduler:
+    type: "cosine_annealing"       # 调度器类型
+    t_max: 500                     # 半周期数
+    eta_min: 1e-6                  # 最小学习率
+    
+  # 策略更新
+  policy_update:
+    update_interval: 100           # 策略网络更新间隔(步数)
+    target_update_interval: 1000   # 目标网络更新间隔(步数)
+    gamma: 0.99                    # 折扣因子
+    tau: 0.005                     # 软更新系数
+    
+  # 探索策略
+  exploration:
+    type: "epsilon_greedy"         # 探索策略
+    epsilon_start: 0.9             # 初始探索率
+    epsilon_end: 0.05              # 最终探索率
+    epsilon_decay: 0.9995          # 探索率衰减
+    
+  # 日志与保存
+  logging:
+    log_interval: 100              # 日志记录间隔(步数)
+    checkpoint_interval: 1000      # 检查点保存间隔(步数)
+    tensorboard: true              # 启用TensorBoard
+    save_dir: "experiments"        # 保存目录
+    
+  # 评估配置
+  evaluation:
+    eval_interval: 1000            # 评估间隔(步数)
+    num_eval_episodes: 10          # 评估回合数
+    save_best_model: true          # 保存最佳模型
+    
+  # 硬件资源配置
+  hardware:
+    device: "cuda"                 # 训练设备 (cpu, cuda)
+    num_workers: 6                 # 数据加载工作线程数
+    pin_memory: true               # 固定内存
+    gpu_batch_limit: 8             # GPU批处理限制
+    cpu_cores: 18                  # 训练使用的CPU核心数
+    mixed_precision: true          # 使用混合精度训练

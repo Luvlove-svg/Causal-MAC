@@ -1,0 +1,45 @@
+# configs/env/custom_map.yaml
+
+# 自定义动态障碍物地图配置
+environment:
+  name: "custom_pursuit_map"
+  base_environment: "pursuit_v4"   # 基础环境
+  max_cycles: 1200                 # 最大回合步数
+  
+  # 动态障碍物设置
+  dynamic_obstacles:
+    enabled: true                  # 启用动态障碍物
+    num_obstacles: 10              # 障碍物数量
+    movement_speed: 0.05           # 障碍物移动速度
+    movement_pattern: "random"     # 移动模式 (random, linear, circular)
+    
+    # 障碍物生成参数
+    generation:
+      min_size: 1                  # 最小尺寸
+      max_size: 3                  # 最大尺寸
+      min_spacing: 2.0             # 最小间距
+      avoid_agents: true           # 避免在智能体附近生成
+      
+  # 观测空间扩展
+  observation:
+    additional_features:
+      - "dynamic_obstacle_position" # 动态障碍物位置
+      - "obstacle_velocity"         # 障碍物速度向量
+      - "collision_prediction"      # 碰撞预测概率
+    
+    feature_dim: 45                # 增加特征维度
+    
+  # 奖励配置扩展
+  reward:
+    dynamic_avoidance_bonus: 2.0   # 成功避开动态障碍物的奖励
+    obstacle_collision_penalty: -3.0 # 与障碍物碰撞的惩罚
+    
+  # 高级设置
+  advanced:
+    obstacle_update_frequency: 5   # 障碍物位置更新频率（每n步）
+    enable_causal_graph_update: true # 启用因果图更新
+    
+  # 硬件优化
+  hardware:
+    num_cpu_cores: 8               # 需要更多CPU核心处理动态障碍物
+    gpu_acceleration: false

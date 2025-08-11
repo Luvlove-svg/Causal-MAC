@@ -1,0 +1,23 @@
+# 评估配置
+num_episodes: 100
+metrics:
+  - success_rate
+  - avg_reward
+  - invalid_message_ratio
+  - gpu_memory_usage
+  - inference_latency
+
+# 基准模型路径
+baselines:
+  ic3net: models/pretrained/ic3net_pursuit.pt
+  tarmac: models/pretrained/tarmac_pursuit.pt
+
+# 资源监控
+resource_monitoring:
+  gpu_poll_interval: 1.0  # 秒
+  cpu_poll_interval: 1.0  # 秒
+
+# 报告输出
+output:
+  report_file: results/evaluation_report.txt
+  plot_file: results/comparison_plot.png

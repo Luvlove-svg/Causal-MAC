@@ -1,0 +1,39 @@
+# configs/model/nsa_attention.yaml
+
+# NSA (Native Sparse Attention) 配置
+attention:
+  name: "nsa_v1"
+  type: "sparse_attention"         # 注意力类型
+  
+  # 基础参数
+  embed_dim: 128                   # 嵌入维度
+  num_heads: 4                     # 注意力头数
+  dropout: 0.1                     # Dropout率
+  bias: true                       # 使用偏置项
+  
+  # 稀疏性配置
+  sparsity:
+    mode: "hardware_aware"         # 稀疏模式 (static, dynamic, hardware_aware)
+    sparsity_ratio: 0.3            # 稀疏率 (0-1)
+    block_size: 64                 # 稀疏块大小
+    min_active_ratio: 0.1          # 最小激活比例
+    
+  # 硬件感知优化
+  hardware_optimization:
+    target_device: "rtx_4060"      # 目标硬件
+    use_tensor_cores: true         # 使用Tensor Cores
+    memory_optimization: true      # 内存优化
+    kernel_optimization: "cuda"    # 内核优化级别 (none, basic, cuda)
+    
+  # 性能指标
+  performance:
+    expected_flops: 15e9           # 预期FLOPS
+    max_memory_usage: 1024         # 最大内存使用(MB)
+    latency_estimate: 5.2          # 预期延迟(ms)
+    
+  # 高级设置
+  advanced:
+    causal_mask: true              # 使用因果掩码
+    residual_connection: true      # 使用残差连接
+    layer_norm: true               # 使用层归一化
+    gradient_checkpointing: false  # 梯度检查点
